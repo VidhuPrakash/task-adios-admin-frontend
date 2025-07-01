@@ -1,13 +1,23 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Command, CommandInput } from "@/components/ui/command";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -26,6 +36,7 @@ const TableSection = () => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(15);
   const [mockData, setMockData] = useState<tableType[]>([]);
   const router = useRouter();
+  const [position, setPosition] = useState<string>("");
   useEffect(() => {
     // Generate data only on client-side
     const createMockData = (count: number) => {
@@ -65,7 +76,33 @@ const TableSection = () => {
   };
   return (
     <div className="border overflow-auto m-[20px]  rounded-[8px] bg-[var(--background-second)] flex flex-col p-6 gap-4">
-      <div className=" rounded-lg overflow-hidden">
+      <div className="flex gap-5">
+        <Command className="w-[300px] bg-[var(--background)]">
+          <CommandInput placeholder="Search..." />
+        </Command>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="plain">Status</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuRadioGroup
+              value={position}
+              onValueChange={setPosition}
+            >
+              <DropdownMenuRadioItem className="text-green-800" value="active">
+                Active
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem className="text-rose-800" value="inactive">
+                Inactive
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem className="" value="">
+                Clear
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="rounded-lg overflow-hidden">
         <Table className="bg-[var(--background)] rounded-lg">
           <TableHeader>
             <TableRow>
@@ -125,11 +162,11 @@ const TableSection = () => {
             ))}
           </TableBody>
         </Table>
-        <TableCaption className="text-left flex">
+        <div className="text-[12px] text-left flex bg-[var(--background-second)] p-2">
           Showing {startIndex + 1} to{" "}
           {Math.min(startIndex + itemsPerPage, mockData.length)} of{" "}
           {mockData.length} companies
-        </TableCaption>
+        </div>
         <div className="flex flex-col sm:flex-row mt-2 items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-[var(--muted-foreground)]">

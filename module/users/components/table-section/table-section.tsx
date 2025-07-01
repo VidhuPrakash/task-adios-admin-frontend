@@ -1,4 +1,13 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Command, CommandInput } from "@/components/ui/command";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -27,6 +36,7 @@ const TableSection = () => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(15);
   const [mockData, setMockData] = useState<tableType[]>([]);
   const router = useRouter();
+  const [position, setPosition] = useState<string>("");
   useEffect(() => {
     // Generate data only on client-side
     const createMockData = (count: number) => {
@@ -67,6 +77,32 @@ const TableSection = () => {
   };
   return (
     <div className="border overflow-auto m-[20px]  rounded-[8px] bg-[var(--background-second)] flex flex-col p-6 gap-4">
+      <div className="flex gap-5">
+        <Command className="w-[300px] bg-[var(--background)]">
+          <CommandInput placeholder="Search..." />
+        </Command>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="plain">Status</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuRadioGroup
+              value={position}
+              onValueChange={setPosition}
+            >
+              <DropdownMenuRadioItem className="text-green-800" value="active">
+                Active
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem className="text-rose-800" value="inactive">
+                Inactive
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem className="" value="">
+                Clear
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className=" rounded-lg overflow-hidden">
         <Table className="bg-[var(--background)] rounded-lg">
           <TableHeader>

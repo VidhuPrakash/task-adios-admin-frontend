@@ -10,12 +10,8 @@ import {
 } from "lucide-react";
 const DashboardRouteLayout = () => {
   return (
-    <div className="flex gap-4 flex-col w-[300px] min-w[300px] border-r min-h-screen p-4">
-      <div className=" font-[700] text-[48px] text-[var(--title-color)]">
-        <span className="text-[var(--title-color-second)]">T</span>ask
-        <span className="text-[var(--title-color-second)]">A</span>
-        dios
-      </div>
+    <div className="fixed flex gap-4 flex-col w-[300px] min-w[300px] border-r min-h-screen p-4">
+      <ProfileSection />
       <div className="grow flex flex-col gap-5">
         <Link
           href={"/dashboard"}
@@ -48,13 +44,17 @@ const DashboardRouteLayout = () => {
           <SmilePlus /> New Company Requests
         </Link>
         <Link
-          href={"/settings"}
+          href={"/settings/account"}
           className="font-[500] text=[12px] w-[100%] gap-2 h-[40px] flex text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
         >
           <Bolt /> Settings
         </Link>
       </div>
-      <ProfileSection />
+      <div className=" font-[700] text-[48px] text-[var(--title-color)]">
+        <span className="text-[var(--title-color-second)]">T</span>ask
+        <span className="text-[var(--title-color-second)]">A</span>
+        dios
+      </div>
     </div>
   );
 };

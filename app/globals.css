@@ -134,3 +134,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+[data-slot="table-container"] {
+  @apply border-0;
+}
