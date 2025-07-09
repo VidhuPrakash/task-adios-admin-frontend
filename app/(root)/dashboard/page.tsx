@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button";
+import DashboardView from "@/module/dashboard/view/dashboard-view";
 
 export default function Dashboard() {
-  return (
-    <div>
-      <Button>Click me Dashboard</Button>
-    </div>
-  );
+  return <DashboardView />;
 }

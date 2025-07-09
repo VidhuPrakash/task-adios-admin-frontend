@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Command, CommandInput } from "@/components/ui/command";
 import {
   DropdownMenu,
@@ -75,7 +76,7 @@ const TableSection = () => {
     setCurrentPage(1);
   };
   return (
-    <div className="border overflow-auto m-[20px]  rounded-[8px] bg-[var(--background-second)] flex flex-col p-6 gap-4">
+    <Card className="border overflow-auto  rounded-[8px] bg-card flex flex-col p-6 gap-4">
       <div className="flex gap-5">
         <Command className="w-[300px] bg-[var(--background)]">
           <CommandInput placeholder="Search..." />
@@ -103,7 +104,7 @@ const TableSection = () => {
         </DropdownMenu>
       </div>
       <div className="rounded-lg overflow-hidden">
-        <Table className="bg-[var(--background)] rounded-lg">
+        <Table className="bg-card rounded-lg">
           <TableHeader>
             <TableRow>
               <TableHead className="border text-start text-[16px] font-[600] px-[20px] h-[50px]">
@@ -162,7 +163,7 @@ const TableSection = () => {
             ))}
           </TableBody>
         </Table>
-        <div className="text-[12px] text-left flex bg-[var(--background-second)] p-2">
+        <div className="text-[12px] text-left flex  p-2">
           Showing {startIndex + 1} to{" "}
           {Math.min(startIndex + itemsPerPage, mockData.length)} of{" "}
           {mockData.length} companies
@@ -234,7 +235,7 @@ const TableSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

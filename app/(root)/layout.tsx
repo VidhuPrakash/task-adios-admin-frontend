@@ -9,9 +9,9 @@ export default function DashboardLayout({
   return (
     <div className="flex items-start justify-between">
       <DashboardRouteLayout />
-      <main className="w-full h-full pl-[300px]">
+      <main className="w-full h-full overflow-hidden pl-[80px] lg:pl-[300px]">
         <DashboardHeader />
-        <div className="pt-[77px]">{children}</div>
+        <div className="pt-[100px] m-[20px] z-1">{children}</div>
       </main>
     </div>
   );

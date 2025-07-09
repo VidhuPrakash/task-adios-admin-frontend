@@ -16,7 +16,7 @@ export default function DashboardHeader() {
       .join(" ");
   }, [path]);
   return (
-    <div className="fixed w-[100%] p-[30px] border-b text-[24px] font-[600]">
+    <div className="fixed  bg-[var(--background)] w-[100%] p-[30px] border-b text-[24px] font-[600]">
       {pageTitle}
     </div>
   );

@@ -1,7 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Command, CommandInput } from "@/components/ui/command";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -66,7 +73,7 @@ const TableSection = () => {
     setCurrentPage(1);
   };
   return (
-    <div className="border overflow-auto m-[20px]  rounded-[8px] bg-[var(--background-second)] flex flex-col p-6 gap-4">
+    <Card className="border overflow-auto bg-card  rounded-[8px]  flex flex-col p-6 gap-4">
       <div className="flex gap-5">
         <Command className="w-[300px] bg-[var(--background)]">
           <CommandInput placeholder="Search..." />
@@ -94,7 +101,7 @@ const TableSection = () => {
         </DropdownMenu>
       </div>
       <div className=" rounded-lg overflow-hidden">
-        <Table className="bg-[var(--background)] rounded-lg">
+        <Table className="bg-card rounded-lg">
           <TableHeader>
             <TableRow>
               <TableHead className="border text-start text-[16px] font-[600] px-[20px] h-[50px]">
@@ -211,7 +218,7 @@ const TableSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

@@ -9,51 +9,44 @@ import {
   FolderGit,
 } from "lucide-react";
 const DashboardRouteLayout = () => {
+  const navItems = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/companies", label: "Companies", icon: Building2 },
+    { href: "/users", label: "Users", icon: IdCardLanyard },
+    { href: "/projects", label: "Projects", icon: FolderGit },
+    {
+      href: "/company-requests",
+      label: "New Company Requests",
+      icon: SmilePlus,
+    },
+    { href: "/settings/account", label: "Settings", icon: Bolt },
+  ];
   return (
-    <div className="fixed flex gap-4 flex-col w-[300px] min-w[300px] border-r min-h-screen p-4">
+    <div className="fixed flex  w-[80px] min-w-[80px]  gap-4 flex-col lg:w-[300px] lg:min-w[300px] border-r min-h-screen p-2 lg:p-4">
       <ProfileSection />
       <div className="grow flex flex-col gap-5">
-        <Link
-          href={"/dashboard"}
-          className="font-[500] text=[12px] w-[100%]  h-[40px] flex gap-2 text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
-        >
-          <LayoutDashboard /> Dashboard
-        </Link>
-        <Link
-          href={"/companies"}
-          className="font-[500] text=[12px] w-[100%] gap-2 h-[40px] flex text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
-        >
-          <Building2 /> Companies
-        </Link>
-        <Link
-          href={"/users"}
-          className="font-[500] text=[12px] w-[100%] gap-2 h-[40px] flex text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
-        >
-          <IdCardLanyard /> Users
-        </Link>
-        <Link
-          href={"/projects"}
-          className="font-[500] text=[12px] w-[100%] gap-2 h-[40px] flex text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
-        >
-          <FolderGit /> Projects
-        </Link>
-        <Link
-          href={"/company-requests"}
-          className="font-[500] text=[12px] w-[100%] gap-2 h-[40px] flex text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
-        >
-          <SmilePlus /> New Company Requests
-        </Link>
-        <Link
-          href={"/settings/account"}
-          className="font-[500] text=[12px] w-[100%] gap-2 h-[40px] flex text-center p-2 rounded-[8px] transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:bg-[var(--background-second)]"
-        >
-          <Bolt /> Settings
-        </Link>
+        {navItems.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className="
+              flex items-center justify-center lg:justify-start
+              gap-0 lg:gap-2
+              h-[40px] rounded-[8px] p-2 font-medium text-[12px]
+              transition-transform duration-300
+              hover:scale-[1.03] hover:bg-[var(--background-second)]
+            "
+          >
+            <Icon className="shrink-0" size={20} />
+            <span className="hidden lg:inline text-[16px]">{label}</span>
+          </Link>
+        ))}
       </div>
-      <div className=" font-[700] text-[48px] text-[var(--title-color)]">
-        <span className="text-[var(--title-color-second)]">T</span>ask
+      <div className="font-[700] text-[48px] text-[var(--title-color)]">
+        <span className="text-[var(--title-color-second)]">T</span>
+        <span className="hidden lg:inline">ask</span>
         <span className="text-[var(--title-color-second)]">A</span>
-        dios
+        <span className="hidden lg:inline">dios</span>
       </div>
     </div>
   );

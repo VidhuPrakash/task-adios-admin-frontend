@@ -1,5 +1,7 @@
+import SettingsAccountView from "@/module/settings-account/views/settings-view";
+
 const Settings = () => {
-  return <div>Settings</div>;
+  return <SettingsAccountView />;
 };
 
 export default Settings;

@@ -19,6 +19,9 @@ export default function SettingsLayout() {
         <TabsTrigger className="w-[300px] " value="account">
           Account
         </TabsTrigger>
+        <TabsTrigger value="users" className="w-[300px]">
+          Users
+        </TabsTrigger>
         <TabsTrigger value="task-status" className="w-[300px]">
           Task&nbsp;status
         </TabsTrigger>
