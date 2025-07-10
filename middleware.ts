@@ -1,12 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = [
-  "/login",
-  "/signup",
-  "/forgot-password",
-  "/password-reset",
-];
-const AUTH_REDIRECT_PATHS = ["/login", "/signup"];
+const PUBLIC_PATHS = ["/"];
+const AUTH_REDIRECT_PATHS = ["/",];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -42,7 +37,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!PUBLIC_PATHS.includes(pathname) && !isAuthenticated) {
-    const loginUrl = new URL("/login", request.url);
+    const loginUrl = new URL("/", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
