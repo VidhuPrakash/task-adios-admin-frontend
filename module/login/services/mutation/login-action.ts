@@ -11,7 +11,6 @@ export const login = async (email: string, password: string) => {
     cache: "no-store",
   });
 
-  console.log(res);
   const payload = await res.json().catch(() => null);
   if (!res.ok) {
     throw new LoginError(
@@ -21,5 +20,5 @@ export const login = async (email: string, password: string) => {
     );
   }
 
-  return payload; // { message, data, status: true, ... }
+  return payload;
 };

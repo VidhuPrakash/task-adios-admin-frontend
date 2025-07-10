@@ -5,11 +5,13 @@ import { useMutation } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { login } from "../../services/mutation/login-action";
 import { LoginError } from "../../services/helper/login-error";
+import { useRouter } from "next/navigation";
 
 const AuthFormCard = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string> | null>(
     null
   );
+  const route = useRouter();
 
   const {
     mutate: loginMutate,
@@ -36,7 +38,7 @@ const AuthFormCard = () => {
     },
 
     onSuccess: (data) => {
-      console.log("📦 Response for Zustand later:", data);
+      route.push("/dashboard");
     },
   });
 

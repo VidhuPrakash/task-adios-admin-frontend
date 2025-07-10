@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       },
       credentials: "include",
     });
-
+    console.log(backend.status);
     // Create response with proper headers
     const response = new NextResponse(backend.body, {
       status: backend.status,

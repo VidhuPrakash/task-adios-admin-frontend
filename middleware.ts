@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const PUBLIC_PATHS = ["/"];
-const AUTH_REDIRECT_PATHS = ["/",];
+const AUTH_REDIRECT_PATHS = ["/"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
       },
       credentials: "include",
     });
+    console.log(sessionRes.ok);
 
     // Check if session is valid (200 OK)
     isAuthenticated = sessionRes.ok;
