@@ -1,5 +1,7 @@
+import CompanyRequestView from "@/module/company-request/view/company-request-view";
+
 const CompanyRequest = () => {
-  return <div>page</div>;
+  return <CompanyRequestView />;
 };
 
 export default CompanyRequest;
