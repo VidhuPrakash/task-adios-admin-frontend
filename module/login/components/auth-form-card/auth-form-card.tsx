@@ -4,13 +4,15 @@ import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { login } from "../../services/mutation/login-action";
-import { LoginError } from "../../../../helper/login-error";
+import { FetchError } from "../../../../helper/error";
 import { useRouter } from "nextjs-toploader/app";
+import useUserStore from "@/store/user-store";
 
 const AuthFormCard = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string> | null>(
     null
   );
+  const setUser = useUserStore((state) => state.setUser);
   const route = useRouter();
 
   const {
@@ -21,13 +23,13 @@ const AuthFormCard = () => {
     isSuccess,
   } = useMutation<
     Awaited<ReturnType<typeof login>>,
-    LoginError,
+    FetchError,
     { email: string; password: string }
   >({
     mutationFn: ({ email, password }) => login(email, password),
 
     onError: (err) => {
-      // err is now typed as LoginError
+      // err is now typed as FetchError
       if (err.fieldErrors) {
         setFieldErrors(
           Object.fromEntries(
@@ -38,6 +40,10 @@ const AuthFormCard = () => {
     },
 
     onSuccess: (data) => {
+      console.log(data);
+      const { name, email, role, permissions } = data.data;
+      setUser(name, email, role, permissions || []);
+
       route.push("/dashboard");
     },
   });
@@ -77,7 +83,7 @@ const AuthFormCard = () => {
     <form
       onSubmit={handleLogin}
       onChange={() => setFieldErrors(null)}
-      className="mt-50 shadow-2xl rounded-lg p-[48px]  w-[50%] flex flex-col gap-4 justify-center "
+      className="lg:mt-50  shadow-2xl rounded-lg p-[48px]  lg:w-[50%] flex flex-col gap-4 justify-center "
     >
       <div className="flex text-center text-[38px] font-[600] items-center justify-center">
         Welcome

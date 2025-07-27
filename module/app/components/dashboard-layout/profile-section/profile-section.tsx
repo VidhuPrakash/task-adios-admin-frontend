@@ -1,24 +1,31 @@
 "use client";
 
-import { profileSession } from "@/module/app/service/query/profile-action";
-import { useQuery } from "@tanstack/react-query";
+import { logout } from "@/module/app/service/query/profile-action";
+import { useMutation } from "@tanstack/react-query";
 import { LogOutIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect, useState } from "react";
+import useUserStore from "@/store/user-store";
+import { useRouter } from "nextjs-toploader/app";
 
 const ProfileSection = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["profileSession"],
-    queryFn: profileSession,
-    staleTime: 5 * 60 * 1000,
+  const { name, email } = useUserStore();
+  const clearUser = useUserStore((state) => state.clearUser);
+  const route = useRouter();
+  const {
+    mutate: logoutMutate,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: () => logout(),
+    onSuccess: (data) => {
+      clearUser();
+      route.push("/");
+    },
   });
-
-  const name = data?.data.name;
-  const email = data?.data.email;
 
   return (
     <div className="relative overflow-hidden group cursor-pointer lg:border  flex items-center gap-2 rounded-[8px] p-2 lg:p-4 transition-transform duration-300 ease-in-out hover:scale-[1.03] hover:shadow-lg min-h-16">
-      {isLoading ? (
+      {isPending ? (
         <div className="flex items-center space-x-2">
           <Skeleton className="h-12 w-12 rounded-full bg-gray-300" />
           <div className="space-y-2">
@@ -37,7 +44,10 @@ const ProfileSection = () => {
               <div className="text-[12px] ">{email}</div>
             </div>
           </div>
-          <div className="absolute inset-0 flex gap-4 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+          <div
+            onClick={() => logoutMutate()}
+            className="absolute inset-0 flex gap-4 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+          >
             <span className=" hidden lg:inline font-bold text-[16px]">
               Logout
             </span>

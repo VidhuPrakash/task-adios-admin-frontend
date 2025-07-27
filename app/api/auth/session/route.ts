@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
     const setCookie = backend.headers.get("set-cookie");
     if (setCookie) {
       response.headers.set("set-cookie", setCookie);
+      
     }
 
     return response;

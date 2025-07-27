@@ -1,4 +1,4 @@
-import { LoginError } from "../../../../helper/login-error";
+import { FetchError } from "../../../../helper/error";
 
 export const login = async (email: string, password: string) => {
   const res = await fetch("api/auth/login", {
@@ -11,7 +11,7 @@ export const login = async (email: string, password: string) => {
 
   const payload = await res.json().catch(() => null);
   if (!res.ok) {
-    throw new LoginError(
+    throw new FetchError(
       payload?.message ?? "Login failed",
       res.status,
       payload?.errors

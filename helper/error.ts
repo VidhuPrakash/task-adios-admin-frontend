@@ -1,12 +1,12 @@
-// services/helper/login-error.ts
+// services/helper/error.ts
 
-export class LoginError extends Error {
+export class FetchError extends Error {
   constructor(
     message: string,
     public status: number = 400,
     public fieldErrors?: { field: string; message: string }[]
   ) {
     super(message);
-    this.name = "LoginError";
+    this.name = "api-error";
   }
 }

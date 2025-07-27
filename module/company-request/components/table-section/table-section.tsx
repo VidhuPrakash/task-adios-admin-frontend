@@ -5,9 +5,7 @@ import { Command, CommandInput } from "@/components/ui/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -19,17 +17,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import {
+  fetchCompanyRequests,
+  useFetchCompanyRequestsMutation,
+} from "../../services/query/list-request-action";
+import { FetchError } from "@/helper/error";
 
 interface tableType {
   id: number;
   name: string;
   email: string;
-  status: string;
-  employees: number;
-  projects: number;
-  joinedAt: string;
+  phoneNumber: string;
+  description: string;
+  website: string;
+  requestedAt: string;
+  country: string;
+  address: string;
+  total: number;
 }
 
 const TableSection = () => {
@@ -38,29 +45,20 @@ const TableSection = () => {
   const [mockData, setMockData] = useState<tableType[]>([]);
   const router = useRouter();
   const [position, setPosition] = useState<string>("");
-  useEffect(() => {
-    // Generate data only on client-side
-    const createMockData = (count: number) => {
-      return Array.from({ length: count }, (_, i) => ({
-        id: i + 1,
-        name: `Company ${i + 1}`,
-        email: `company${i + 1}@gmail.com`,
-        status: i % 4 === 0 ? "Inactive" : "Active",
-        employees: Math.floor(Math.random() * 100) + 1,
-        projects: Math.floor(Math.random() * 20) + 1,
-        joinedAt: `2023-${String(Math.floor(Math.random() * 12) + 1).padStart(
-          2,
-          "0"
-        )}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`,
-      }));
-    };
-
-    setMockData(createMockData(35));
-  }, []);
-
+  const [keyword, setKeyword] = useState<string>("");
+  const { mutate, isPending } = useFetchCompanyRequestsMutation(setMockData);
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = mockData.slice(startIndex, startIndex + itemsPerPage);
+
+  useEffect(() => {
+    mutate({
+      keyword,
+      page: currentPage,
+      limit: itemsPerPage,
+      pageSize: itemsPerPage,
+    });
+  }, [keyword, currentPage, itemsPerPage, position]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -75,10 +73,18 @@ const TableSection = () => {
     setItemsPerPage(newPerPage);
     setCurrentPage(1);
   };
+  const handleKeywordChange = (event: FormEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLInputElement;
+    setKeyword(target.value);
+  };
+
   return (
     <Card className="border overflow-auto  rounded-[8px] bg-card flex flex-col p-6 gap-4">
       <div className="flex gap-5">
-        <Command className="w-[300px] bg-[var(--background)]">
+        <Command
+          onChange={handleKeywordChange}
+          className="w-[300px] bg-[var(--background)]"
+        >
           <CommandInput placeholder="Search..." />
         </Command>
         <DropdownMenu>
@@ -139,25 +145,14 @@ const TableSection = () => {
                 <TableCell className="border text-[14px] font-[500] border-[var(--border)] text-start px-[20px]">
                   {item.email}
                 </TableCell>
-                <TableCell className="border border-[var(--border)] text-[14px] font-[500] text-start px-[20px]">
-                  <span
-                    className={` text-[14px] font-[500] ${
-                      item.status === "Active"
-                        ? " text-green-800"
-                        : " text-rose-800"
-                    }`}
-                  >
-                    {item.status}
-                  </span>
-                </TableCell>
                 <TableCell className="border text-[14px] font-[500] border-[var(--border)] text-start px-[20px]">
-                  {item.employees}
+                  {item.phoneNumber}
                 </TableCell>
                 <TableCell className="border border-[var(--border)] text-[14px] font-[500] text-start px-[20px]">
-                  {item.projects}
+                  {item.description}
                 </TableCell>
                 <TableCell className="border border-[var(--border)] text-start px-[20px] text-[14px] font-[500]">
-                  {item.joinedAt}
+                  {item.requestedAt}
                 </TableCell>
               </TableRow>
             ))}

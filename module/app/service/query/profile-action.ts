@@ -1,18 +1,12 @@
-import { LoginError } from "../../../../helper/login-error";
-
-type Profile = {
-  email: string;
-  name: string;
-};
+import { FetchError } from "../../../../helper/error";
 
 interface PayLoadResponse {
   message: string;
-  data: Profile;
 }
 
-export const profileSession = async (): Promise<PayLoadResponse> => {
-  const res = await fetch("api/auth/session", {
-    method: "GET",
+export const logout = async (): Promise<PayLoadResponse> => {
+  const res = await fetch("api/logout", {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     cache: "no-store",
@@ -20,7 +14,7 @@ export const profileSession = async (): Promise<PayLoadResponse> => {
 
   const payload = await res.json().catch(() => null);
   if (!res.ok) {
-    throw new LoginError(
+    throw new FetchError(
       payload?.message ?? "data fetch failed",
       res.status,
       payload?.errors

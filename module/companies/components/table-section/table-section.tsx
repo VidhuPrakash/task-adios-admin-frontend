@@ -21,6 +21,10 @@ import {
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  TableType,
+  useFetchCompanyRequestsMutation,
+} from "../../service/mutation/list-company-action";
 
 interface tableType {
   id: number;
@@ -35,32 +39,32 @@ interface tableType {
 const TableSection = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(15);
-  const [mockData, setMockData] = useState<tableType[]>([]);
+  const [companies, setCompanies] = useState<TableType[]>([]);
   const router = useRouter();
   const [position, setPosition] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [total, setTotal] = useState<number>(0);
+
+  const mutation = useFetchCompanyRequestsMutation((data) => {
+    setCompanies(data);
+    setTotal(data.length);
+  });
+
   useEffect(() => {
-    // Generate data only on client-side
-    const createMockData = (count: number) => {
-      return Array.from({ length: count }, (_, i) => ({
-        id: i + 1,
-        name: `Company ${i + 1}`,
-        email: `company${i + 1}@gmail.com`,
-        status: i % 4 === 0 ? "Inactive" : "Active",
-        employees: Math.floor(Math.random() * 100) + 1,
-        projects: Math.floor(Math.random() * 20) + 1,
-        joinedAt: `2023-${String(Math.floor(Math.random() * 12) + 1).padStart(
-          2,
-          "0"
-        )}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`,
-      }));
-    };
+    // Compose keyword from search/status
+    let keyword = search;
+    if (status) keyword = keyword ? `${keyword} ${status}` : status;
 
-    setMockData(createMockData(35));
-  }, []);
+    mutation.mutate({
+      keyword,
+      page: currentPage,
+      limit: itemsPerPage,
+      pageSize: itemsPerPage,
+    });
+  }, [currentPage, itemsPerPage, search, status]);
 
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = mockData.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(total / itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -71,10 +75,17 @@ const TableSection = () => {
   const handleItemsPerPageChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const newPerPage = parseInt(e.target.value, 10);
-    setItemsPerPage(newPerPage);
+    setItemsPerPage(parseInt(e.target.value, 10));
     setCurrentPage(1);
   };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
+
+  const currentItems = companies;
+
   return (
     <Card className="border overflow-auto  rounded-[8px] bg-card flex flex-col p-6 gap-4">
       <div className="flex gap-5">
@@ -87,8 +98,11 @@ const TableSection = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuRadioGroup
-              value={position}
-              onValueChange={setPosition}
+              value={status}
+              onValueChange={(v) => {
+                setStatus(v);
+                setCurrentPage(1);
+              }}
             >
               <DropdownMenuRadioItem className="text-green-800" value="active">
                 Active
@@ -151,22 +165,21 @@ const TableSection = () => {
                   </span>
                 </TableCell>
                 <TableCell className="border text-[14px] font-[500] border-[var(--border)] text-start px-[20px]">
-                  {item.employees}
+                  {item.employees ?? 0}
                 </TableCell>
                 <TableCell className="border border-[var(--border)] text-[14px] font-[500] text-start px-[20px]">
-                  {item.projects}
+                  {item.projects ?? 0}
                 </TableCell>
                 <TableCell className="border border-[var(--border)] text-start px-[20px] text-[14px] font-[500]">
-                  {item.joinedAt}
+                  {item.requestedAt}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
         <div className="text-[12px] text-left flex  p-2">
-          Showing {startIndex + 1} to{" "}
-          {Math.min(startIndex + itemsPerPage, mockData.length)} of{" "}
-          {mockData.length} companies
+          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+          {Math.min(currentPage * itemsPerPage, total)} of {total} companies
         </div>
         <div className="flex flex-col sm:flex-row mt-2 items-center justify-between gap-4">
           <div className="flex items-center gap-2">

@@ -17,8 +17,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
   // Handle redirects
-  if (!hasCookie && pathname !== "/login" && !PUBLIC_PATHS.includes(pathname)) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!hasCookie && pathname !== "/" && !PUBLIC_PATHS.includes(pathname)) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();
 }
@@ -33,6 +33,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - image.png (specific static file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|image.png|firebase-messaging-sw.js).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|auth-bg.png|firebase-messaging-sw.js).*)",
   ],
 };
